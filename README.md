@@ -21,6 +21,11 @@ BasicItemSync can be automatically installed by any Thunderstore compatible mod 
 
 ## Commands
 ```
+/sync-ui
+```
+Shows a graphical interface, equivalent to `/sync`, allowing multiple settings to be set at once.
+
+```
 /sync [module] [true/false]
 ```
 Enables or disables syncing one of the following modules. Unless specified, modules are on by default.

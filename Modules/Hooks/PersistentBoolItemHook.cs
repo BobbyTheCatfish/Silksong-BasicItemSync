@@ -318,11 +318,11 @@ internal class PersistentBoolItemHook
         else if (commonId.StartsWith("battle scene") || commonId.StartsWith("black thread battle scene") || commonId.StartsWith("boss scene")) flagType = FlagType.Arena;
         else
         {
-            Log.LogDebug($"persistent '{__instance.ItemData.ID}' value was not sent");
+            Log.LogDebug($"[CLI: PBI.SSNC]persistent '{__instance.ItemData.ID}' value was not sent");
             return;
         }
 
-        Log.LogDebug($"[CLI: PERSISTENT] {commonId}, {flagType}");
+        Log.LogDebug($"[CLI: PBI.SSNC] {commonId}, {flagType}");
 
         NetworkSender.AddPersistentBoolData(id, scene, value, flagType);
     }

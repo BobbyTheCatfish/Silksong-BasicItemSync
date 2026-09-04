@@ -96,7 +96,7 @@ internal static class HitSlidePlatformHook
     {
         if (__state == __instance.currentNodeIndex)
         {
-            Log.LogDebug($"[CLI HSP.OH] Platform {__instance.name} state was the same ({__state})");
+            Log.LogDebug($"[CLI: HSP.OH] Platform {__instance.name} state was the same ({__state})");
             return;
         }
 

@@ -83,20 +83,20 @@ internal class EventHooks
         {
             if (!SceneData.instance.PersistentBools.TryGetValue("Bone_05", ItemNames.SilkHeart, out var persistent))
             {
-                Log.LogDebug($"[CLI] No silk heart persistent for Bone_05");
+                Log.LogDebug($"[CLI: EventHook.OBBD] No silk heart persistent for Bone_05");
                 return;
             }
             
             if (!persistent.Value)
             {
-                Log.LogDebug($"[CLI] Haven't accepted silk heart for Bone_05");
+                Log.LogDebug($"[CLI: EventHook.OBBD] Haven't accepted silk heart for Bone_05");
                 return;
             }
 
             var bossScene = SceneManager.GetSceneByName("Bone_05_boss");
             if (!bossScene.IsValid()) return;
 
-            Log.LogDebug($"[CLI] Deactivating bell beast");
+            Log.LogDebug($"[CLI: EventHook.OBBD] Deactivating bell beast");
 
             foreach (var obj in bossScene.GetRootGameObjects())
             {

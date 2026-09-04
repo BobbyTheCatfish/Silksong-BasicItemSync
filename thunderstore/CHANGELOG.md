@@ -1,6 +1,9 @@
 # Changelog
 
 ## 0.1
+### 0.1.3
+- Updated the SSMP addon version since I forgot in 0.1.2... oops!
+
 ### 0.1.2
 - Added `/sync-ui` for easier access to settings
 - Fixed a bug where sliding platforms in Whispering Vaults would reset upon leaving the room
