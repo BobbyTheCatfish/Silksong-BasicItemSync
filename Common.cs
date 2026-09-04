@@ -5,7 +5,7 @@ namespace BasicItemSync;
 internal class Common
 {
     internal const string AddonName = "BasicItemSync";
-    internal const string AddonVersion = "0.1.3";
+    internal const string AddonVersion = "0.1.4";
     internal const int AddonApiVersion = 1;
 }
 

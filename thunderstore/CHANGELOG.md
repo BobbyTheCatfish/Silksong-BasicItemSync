@@ -1,11 +1,15 @@
 # Changelog
 
 ## 0.1
+### 0.1.4
+- Increased compatibility with SSMP standalone server
+
 ### 0.1.3
 - Updated the SSMP addon version since I forgot in 0.1.2... oops!
 
 ### 0.1.2
 - Added `/sync-ui` for easier access to settings
+- Added mod settings (ModMenu/BepInEx) for log levels
 - Fixed a bug where sliding platforms in Whispering Vaults would reset upon leaving the room
 - Fixed a bug that prevented syncing relic pickups
 - Fixed map marker icons in lower left notifications
