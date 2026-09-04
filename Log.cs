@@ -1,4 +1,5 @@
 ﻿using BasicItemSync.Modules;
+using BasicItemSync.Modules.Mocks;
 using SSMP.Logging;
 
 namespace BasicItemSync;
@@ -16,9 +17,24 @@ internal class FakeLogger : ILogger
 internal static class Log
 {
     static ILogger logger = new FakeLogger();
+    static IModSettings settings = new MockModSettings();
     public static void SetLogger(ILogger log)
     {
         logger = log;
+
+        // Attempt to use the bepinex mod settings
+        // If it fails (on standalone server), use the backup mock settings
+        try
+        {
+            var modSettings = new ModSettings();
+            var a = modSettings.InstanceDebugLogs;
+
+            settings = modSettings;
+        }
+        catch
+        {
+            logger.Warn("Unable to load ModSettings. Likely using standalone server.");
+        }
 
 #if DEBUG
         //FilteredLogs.API.ApplyFilter(ShouldLog);
@@ -61,7 +77,7 @@ internal static class Log
     }
     public static void LogDebug(params object[] data)
     {
-        if (ModSettings.DebugLogs)
+        if (settings.InstanceDebugLogs)
         {
             foreach (object obj in data)
                 logger.Debug(obj.ToString());

@@ -1,15 +1,15 @@
-﻿using BepInEx.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BasicItemSync.Modules.Mocks;
+using BepInEx.Configuration;
 
 namespace BasicItemSync.Modules
 {
-    internal static class ModSettings
+    internal class ModSettings : IModSettings
     {
+        public bool InstanceDebugPlayerData => DebugPlayerData;
         public static bool DebugPlayerData => _debugPlayerData?.Value ?? false;
         static ConfigEntry<bool> _debugPlayerData;
 
+        public bool InstanceDebugLogs => DebugLogs;
         public static bool DebugLogs => _debugLogs?.Value ?? false;
         static ConfigEntry<bool> _debugLogs;
 
