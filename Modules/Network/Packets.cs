@@ -8,11 +8,18 @@ namespace BasicItemSync.Modules.Network;
 
 internal class Packet : IPacketData
 {
+    public string Ticket = "";
     public virtual bool IsReliable => true;
     public virtual bool DropReliableDataIfNewerExists => false;
+    public virtual void WriteData(IPacket packet)
+    {
+        packet.Write(Ticket);
+    }
 
-    public virtual void ReadData(IPacket packet) { }
-    public virtual void WriteData(IPacket packet) { }
+    public virtual void ReadData(IPacket packet)
+    {
+        Ticket = packet.ReadString();
+    }
 }
 
 internal class SendFlagPacket : Packet
@@ -23,6 +30,7 @@ internal class SendFlagPacket : Packet
 
     public override void WriteData(IPacket packet)
     {
+        base.WriteData(packet);
         packet.Write(Key);
         packet.Write(Name);
         packet.Write((int)FlagType);
@@ -30,6 +38,7 @@ internal class SendFlagPacket : Packet
 
     public override void ReadData(IPacket packet)
     {
+        base.ReadData(packet);
         Key = packet.ReadString();
         Name = packet.ReadString();
         FlagType = (FlagType)packet.ReadInt();
@@ -93,6 +102,7 @@ internal class SendPersistentBoolsPacket : Packet
     public Dictionary<(string, string), (bool, FlagType)> Values = [];
     public override void WriteData(IPacket packet)
     {
+        base.WriteData(packet);
         packet.Write(Values.Count);
         foreach (var val in Values)
         {
@@ -110,6 +120,7 @@ internal class SendPersistentBoolsPacket : Packet
 
     public override void ReadData(IPacket packet)
     {
+        base.ReadData(packet);
         var len = packet.ReadInt();
 
         for (var i = 0; i < len; i++)
@@ -129,6 +140,7 @@ internal class SendPersistentIntsPacket : Packet
     public Dictionary<(string, string), (int, FlagType)> Values = [];
     public override void WriteData(IPacket packet)
     {
+        base.WriteData(packet);
         packet.Write(Values.Count);
         foreach (var val in Values)
         {
@@ -146,6 +158,7 @@ internal class SendPersistentIntsPacket : Packet
 
     public override void ReadData(IPacket packet)
     {
+        base.ReadData(packet);
         var len = packet.ReadInt();
 
         for (var i = 0; i < len; i++)
@@ -214,13 +227,13 @@ internal class SendCurrencyPacket : Packet
 
 internal class SettingsUpdatePacket : Packet
 {
-    public override bool IsReliable => true;
     public override bool DropReliableDataIfNewerExists => true;
 
     public SyncServerSettings Settings = new();
 
     public override void WriteData(IPacket packet)
     {
+        base.WriteData(packet);
         var values = Settings.ToValues();
         packet.Write(values.Count);
         foreach (var prop in values)
@@ -231,6 +244,7 @@ internal class SettingsUpdatePacket : Packet
 
     public override void ReadData(IPacket packet)
     {
+        base.ReadData(packet);
         List<bool> values = [];
         var len = packet.ReadInt();
         for (var i = 0; i < len; i++)

@@ -11,13 +11,24 @@ namespace BasicItemSync.Modules.Network.Client
         static int ShardsToSend = 0;
         static SendPersistentBoolsPacket PersistentBoolsToSend = new();
         static SendPersistentIntsPacket PersistentIntsToSend = new();
+        static uint TicketCount = 0;
         public static void Initialize()
         {
             Sender = ClientAddon.api.NetClient.GetNetworkSender<Packets>(ClientAddon.Instance);
         }
 
+        static string GetTicket()
+        {
+            var ticket = TicketCount++;
+            return ticket.ToString();
+        }
+
         static void SendCollectionData(Packets type, Packet packet)
         {
+            if (packet.IsReliable)
+            {
+                packet.Ticket = GetTicket();
+            }
             if (!ClientAddon.api.NetClient.IsConnected || Sender == null)
             {
                 Log.LogDebug("[CLI: Network Sender Collection] Not connected");

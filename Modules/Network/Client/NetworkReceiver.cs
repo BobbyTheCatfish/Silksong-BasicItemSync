@@ -1,4 +1,5 @@
 ﻿using SSMP.Api.Client.Networking;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BasicItemSync.Modules.Network.Client;
@@ -25,8 +26,20 @@ internal class NetworkReceiver
         Receiver.RegisterPacketHandler<SendPersistentIntsPacket>(Packets.PersistentInt, OnPersistentInt);
     }
 
+    static readonly HashSet<string> HandledTickets = [];
+
+    static bool HasBeenHandled(Packet packet)
+    {
+        var ticket = packet.Ticket;
+        if (HandledTickets.Contains(ticket)) return true;
+
+        HandledTickets.Add(ticket);
+        return false;
+    }
+
     static bool HandleSpecialData(SendFlagPacket packet)
     {
+        if (HasBeenHandled(packet)) return true;
         UI.ShowPopup(packet.FlagType, packet.Key, packet.Name);
 
         return false;
@@ -153,7 +166,6 @@ internal class NetworkReceiver
         });
     }
 
-
     static void OnCollectable(SendIntItemPacket packet)
     {
         SyncPlugin.AddNextFrameAction(() =>
@@ -169,6 +181,8 @@ internal class NetworkReceiver
 
     static void OnPersistentBools(SendPersistentBoolsPacket packet)
     {
+        if (HasBeenHandled(packet)) return;
+
         foreach (var item in packet.Values)
         {
             var scene = item.Key.Item1;
@@ -181,6 +195,8 @@ internal class NetworkReceiver
 
     static void OnPersistentInt(SendPersistentIntsPacket packet)
     {
+        if (HasBeenHandled(packet)) return;
+
         foreach (var item in packet.Values)
         {
             var scene = item.Key.Item1;

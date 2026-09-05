@@ -28,9 +28,19 @@ internal class NetworkForwarder
         Receiver.RegisterPacketHandler<SettingsUpdatePacket>(Packets.Settings, OnSettings);
     }
 
+    static string ModifyTicket(string ticket, ushort senderId)
+    {
+        return $"{senderId}-{ticket}";
+    }
+
     static void Broadcast(ushort senderId, Packets type, Packet packet)
     {
         if (Sender == null) return;
+
+        if (packet.IsReliable)
+        {
+            packet.Ticket = ModifyTicket(packet.Ticket, senderId);
+        }
 
         foreach (var player in ServerAddon.api.ServerManager.Players)
         {
