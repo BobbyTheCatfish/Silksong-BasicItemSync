@@ -107,7 +107,7 @@ internal class NetworkForwarder
             FlagType.Pin => "obtained $",
             FlagType.Bellshrine => "activated the $ Bellshrine",
             FlagType.Boss => "defeated $",
-            FlagType.Arena => "defeated $",
+            FlagType.Arena => "defeated the $ arena",
             FlagType.Progression => "obtained the $",
             FlagType.Collectable => "collected a $",
             FlagType.Bellway => "unlocked the $ Bellway Station",

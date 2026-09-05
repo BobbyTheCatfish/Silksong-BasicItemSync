@@ -31,6 +31,7 @@ namespace BasicItemSync.Data
             { nameof(PlayerData.hasDoubleJump),                 new("Faydown Cloak", FlagType.Ability) },
             { nameof(PlayerData.UnlockedFastTravel),            new("Bell Beast", FlagType.Ability) },
             { nameof(PlayerData.UnlockedFastTravelTeleport),    new("Beastling Call", FlagType.Ability) },
+            { nameof(PlayerData.hasNeedolinMemoryPowerup),      new("Elegy of the Deep", FlagType.Ability) },
             { nameof(PlayerData.hasChargeSlash),                new("Needle Strike", FlagType.Ability) },
             { nameof(PlayerData.hasSuperJump),                  new("Silk Soar", FlagType.Ability) },
             { nameof(PlayerData.HasBoundCrestUpgrader),         new("Sylphsong", FlagType.Ability) },
@@ -221,17 +222,19 @@ namespace BasicItemSync.Data
             { nameof(PlayerData.HasSlabKeyA),                   new("Key of Indolent", FlagType.Progression) },
             { nameof(PlayerData.HasSlabKeyB),                   new("Key of Heretic", FlagType.Progression) },
             { nameof(PlayerData.HasSlabKeyC),                   new("Key of Apostate", FlagType.Progression) },
-            { nameof(PlayerData.CollectedHeartFlower),          new("Pollen Heart", FlagType.Progression) },
-            { nameof(PlayerData.CollectedHeartCoral),           new("Encrusted Heart", FlagType.Progression) },
-            { nameof(PlayerData.CollectedHeartHunter),          new("Hunter's Heart", FlagType.Progression) },
-            { nameof(PlayerData.CollectedHeartClover),          new("Conjoined Heart", FlagType.Progression) },
+            { nameof(PlayerData.CollectedHeartFlower),          new("", FlagType.Progression) },
+            { nameof(PlayerData.CollectedHeartCoral),           new("", FlagType.Progression) },
+            { nameof(PlayerData.CollectedHeartHunter),          new("", FlagType.Progression) },
+            { nameof(PlayerData.CollectedHeartClover),          new("", FlagType.Progression) },
             { nameof(PlayerData.CompletedRedMemory),            new("Red Memory", FlagType.Progression) },
             { nameof(PlayerData.UnlockedDustCage),              new("Green Prince's Freedom", FlagType.Progression) },
             { nameof(PlayerData.grubFarmerEmerged),             new("Styx", FlagType.Progression) },
             { nameof(PlayerData.BelltownHouseUnlocked),         new("Bellhome", FlagType.Progression) },
             { nameof(PlayerData.collectedWardBossKey),          new("Whiteward Boss Key", FlagType.Progression) },
             { nameof(PlayerData.wokeSongChevalier),             new("Second Sentinel", FlagType.Progression) },
+            { nameof(PlayerData.BallowGivenKey),                new("", FlagType.Progression) },
             { nameof(PlayerData.citadelWoken),                  new("", FlagType.Progression) },
+            { nameof(PlayerData.laceMeetCitadel),               new("", FlagType.Progression) },
 
             // Collectable Items
             { nameof(PlayerData.PurchasedBonebottomFaithToken),     new("", FlagType.Collectable) },
@@ -300,7 +303,7 @@ namespace BasicItemSync.Data
             // Fleas
             { nameof(PlayerData.SavedFlea_Bone_06),             new("The Marrow", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Dock_16),             new("Deep Docks", FlagType.Flea) },
-            { nameof(PlayerData.SavedFlea_Bone_East_05),        new("Far Fields", FlagType.Flea) },
+            { nameof(PlayerData.SavedFlea_Bone_East_05),        new("Deep Docks", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Bone_East_17b),       new("Far Fields", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Ant_03),              new("Hunter's March", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Greymoor_15b),        new("Greymoor", FlagType.Flea) },
@@ -311,7 +314,7 @@ namespace BasicItemSync.Data
             { nameof(PlayerData.SavedFlea_Dust_12),             new("Sinners Road", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Dust_09),             new("Sinners Road", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Belltown_04),         new("Bellhart", FlagType.Flea) },
-            { nameof(PlayerData.SavedFlea_Crawl_06),            new("The Underworks", FlagType.Flea) },
+            { nameof(PlayerData.SavedFlea_Crawl_06),            new("Wormways", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Slab_Cell),           new("The Slab", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Shadow_28),           new("Bilewater", FlagType.Flea) },
             { nameof(PlayerData.SavedFlea_Dock_03d),            new("Deep Docks", FlagType.Flea) },
@@ -468,21 +471,15 @@ namespace BasicItemSync.Data
         };
 
         public static Dictionary<string, Key> IntKeys = new() {
-            { nameof(PlayerData.nailUpgrades),      new("N", FlagType.Needle)},
-
-            { nameof(PlayerData.QuillState), new("", FlagType.Collectable) },
+            { nameof(PlayerData.nailUpgrades),              new("N", FlagType.Needle)},
+            { nameof(PlayerData.CaravanTroupeLocation),     new("", FlagType.Flea) },
+            { nameof(PlayerData.QuillState),                new("", FlagType.Collectable) },
+            { nameof(PlayerData.enclaveLevel),              new("", FlagType.Progression) },
             //{ nameof(PlayerData.ToolPouchUpgrades), new("Tool Pouch Upgrade", FlagType.Pouch) },
             //{ nameof(PlayerData.ToolKitUpgrades),   new("Tool Kit Upgrade", FlagType.CraftingKit) },
         };
 
         public static HashSet<string> FloatKeys = [
         ];
-
-        public static Dictionary<string, string> Collectables = new() {
-            //{ "Crafting Kit", new("Crafting Kit", FlagType.CraftingKit) },
-            //{ "Tool Pouch", new("Tool Pouch", FlagType.Pouch) },
-            { "Crest Socket Unlocker", "Memory Locket" },
-            { "Simple Key", "Simple Key" }
-        };
     }
 }
