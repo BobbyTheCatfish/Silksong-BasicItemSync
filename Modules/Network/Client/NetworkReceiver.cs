@@ -67,6 +67,7 @@ internal class NetworkReceiver
             if (!HandleSpecialData(packet))
             {
                 PlayerData.instance.SetBool(packet.Key, packet.State);
+                if (packet.FlagType == FlagType.Tool) ToolHelper.GiveSilkSkill(packet.Key);
             }
             ClientState.LastItem = "";
 
@@ -109,34 +110,7 @@ internal class NetworkReceiver
 
             if (!HandleSpecialData(packet))
             {
-                if (packet.FlagType == FlagType.Crest)
-                {
-                    var crest = ToolItemManager.GetCrestByName(packet.Key);
-                    if (crest)
-                    {
-                        crest.Unlock();
-                    }
-                }
-                else
-                {
-                    var tool = ToolItemManager.GetToolByName(packet.Key);
-                    if (tool)
-                    {
-                        PlayerData.instance.SeenToolGetPrompt = true;
-                        PlayerData.instance.SeenToolWeaponGetPrompt = true;
-
-                        if (packet.State)
-                        {
-                            tool.Unlock();
-                            // Equip silk skill if one isn't equipped yet
-                            if (tool.Type == ToolItemType.Skill && !ToolItemManager.GetCurrentEquippedTools().Any(t => t.Type == ToolItemType.Skill))
-                            {
-                                ToolItemManager.AutoEquip(tool);
-                            }
-                        }
-                        else tool.Lock();
-                    }
-                }
+                ToolHelper.GiveTool(packet.Key, packet.State, packet.FlagType == FlagType.Crest);
             }
 
             ClientState.LastItem = "";
