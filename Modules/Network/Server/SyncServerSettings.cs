@@ -9,6 +9,8 @@ namespace BasicItemSync.Modules.Network.Server
 {
     internal class SyncServerSettings
     {
+        public bool TeamOnly = false;
+        public bool NoTeamIsNoSync = false;
         public bool KillSwitch = false;
         public bool SyncAbilities = true;
         public bool SyncMaps = true;

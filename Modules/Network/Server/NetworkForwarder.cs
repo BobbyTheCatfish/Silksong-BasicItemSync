@@ -1,4 +1,5 @@
-﻿using SSMP.Api.Server.Networking;
+﻿using SSMP.Api.Server;
+using SSMP.Api.Server.Networking;
 using System.Collections.Generic;
 
 namespace BasicItemSync.Modules.Network.Server;
@@ -42,10 +43,36 @@ internal class NetworkForwarder
             packet.Ticket = ModifyTicket(packet.Ticket, senderId);
         }
 
+        var senderTeam = ServerAddon.api.ServerManager.GetPlayer(senderId)?.Team ?? SSMP.Game.Team.None;
+
         foreach (var player in ServerAddon.api.ServerManager.Players)
         {
             if (player.Id == senderId) continue;
+
+            if (ServerAddon.Settings.TeamOnly)
+            {
+                if (player.Team != senderTeam) continue;
+                if (ServerAddon.Settings.NoTeamIsNoSync && player.Team == SSMP.Game.Team.None) continue;
+            }
+
             Sender.SendCollectionData(type, packet, player.Id);
+        }
+    }
+
+    static void BroadcastMessage(IServerPlayer sender, string message)
+    {
+        if (!ServerAddon.Settings.TeamOnly)
+        {
+            ServerAddon.api.ServerManager.BroadcastMessage(message);
+            return;
+        }
+        
+        var senderTeam = sender.Team;
+        if (ServerAddon.Settings.NoTeamIsNoSync && senderTeam == SSMP.Game.Team.None) return;
+
+        foreach (var player in ServerAddon.api.ServerManager.Players)
+        {
+            if (player.Team == senderTeam) ServerAddon.api.ServerManager.SendMessage(player, message);
         }
     }
 
@@ -145,7 +172,7 @@ internal class NetworkForwarder
         var name = string.IsNullOrEmpty(packet.Name) ? packet.Key : packet.Name;
         var message = $"{player?.Username ?? "Unknown Player"} {template.Replace("$", name)}";
 
-        ServerAddon.api.ServerManager.BroadcastMessage(message);
+        BroadcastMessage(player, message);
     }
 
     static void OnFlag(ushort id, SendFlagPacket packet, Packets type, bool isPD)

@@ -25,6 +25,11 @@ BasicItemSync can be automatically installed by any Thunderstore compatible mod 
 ```
 Shows a graphical interface, equivalent to `/sync`, allowing multiple settings to be set at once.
 
+Additional settings:
+- `TeamOnly` (default false): If true, items are only synced between teams. Switching teams mid-game is not recommended.
+- `NoTeamIsNoSync`(default false): If true, players not on a team will not have synced items. If false, no team is its own team.
+- `KillSwitch` (default false): If true, item sync is turned off.
+
 ```
 /sync [module] [true/false]
 ```
