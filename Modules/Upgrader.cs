@@ -36,6 +36,15 @@ namespace BasicItemSync.Modules
 
         public static bool UpgradeSpool(string sceneName) 
         {
+            if (SceneData.instance.PersistentBools.TryGetValue(sceneName, "Silk Spool", out var persistent))
+            {
+                if (persistent.Value)
+                {
+                    Log.LogWarning($"[CLI: Upgrade Spool] Spool Fragment in {sceneName} already obtained. Not giving.");
+                    return false;
+                }
+            }
+
             PersistentHandler.SetPersistentBoolData(sceneName, "Silk Spool", true, true);
             PlayerData.instance.silkSpoolParts++;
 
@@ -44,7 +53,6 @@ namespace BasicItemSync.Modules
                 PlayerData.instance.silkSpoolParts = 0;
                 HeroController.instance.AddToMaxSilk(1);
                 EventRegister.SendEvent("SPOOL MAX UP");
-                //EventRegister.SendEvent("SPOOL UNBROKEN");
             }
 
             LoadAndDisplay(ref SpoolCollectable, "Spool", "UI", "SHOP_SPOOL_SEGMENT_NAME");
@@ -130,6 +138,7 @@ namespace BasicItemSync.Modules
 
             return Save();
         }
+
         static void LoadAndDisplay(ref FakeCollectable? assetRef, string dictKey, string langSheet, string langKey)
         {
             if (assetRef == null)
