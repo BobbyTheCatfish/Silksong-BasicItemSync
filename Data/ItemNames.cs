@@ -235,6 +235,7 @@ namespace BasicItemSync.Data
             { nameof(PlayerData.BallowGivenKey),                new("", FlagType.Progression) },
             { nameof(PlayerData.citadelWoken),                  new("", FlagType.Progression) },
             { nameof(PlayerData.laceMeetCitadel),               new("", FlagType.Progression) },
+            { nameof(PlayerData.SeenFleatopiaEmpty),            new("", FlagType.Progression) },
 
             // Collectable Items
             { nameof(PlayerData.PurchasedBonebottomFaithToken),     new("", FlagType.Collectable) },

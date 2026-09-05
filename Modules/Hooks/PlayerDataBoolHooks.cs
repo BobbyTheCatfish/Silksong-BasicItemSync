@@ -1,7 +1,9 @@
 ﻿using BasicItemSync.Data;
 using BasicItemSync.Modules.Network.Client;
+using GlobalEnums;
 using HarmonyLib;
 using HutongGames.PlayMaker.Actions;
+using System;
 using System.Reflection;
 
 
@@ -53,11 +55,11 @@ internal static class PlayerDataHook
             var newValue = existing;
 
             if (operation == PlayerDataIntOperation.Operation.Set && value == existing) return;
-            
+
             else if (operation == PlayerDataIntOperation.Operation.Add) newValue += value;
             else if (operation == PlayerDataIntOperation.Operation.Subtract) newValue -= value;
             else if (operation == PlayerDataIntOperation.Operation.Multiply) newValue *= value;
-            else return;
+            else newValue = value;
 
             NetworkSender.SendInt(intName, key.Type, key.Name, newValue);
         }
@@ -97,6 +99,10 @@ internal static class SetPlayerDataVariableHook
         else if (value is int iValue)
         {
             PlayerDataHook.IntUpdated(varName, iValue);
+        }
+        else if (value is CaravanTroupeLocations eValue)
+        {
+            PlayerDataHook.IntUpdated(varName, (int)eValue);
         }
     }
 }

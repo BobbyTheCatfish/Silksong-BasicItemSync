@@ -39,7 +39,8 @@ internal class NetworkReceiver
             ClientState.LastItem = packet.Key;
             if (!HandleSpecialData(packet))
             {
-                PlayerData.instance.SetInt(packet.Key, packet.Number);
+                if (packet.Key == nameof(PlayerData.CaravanTroupeLocation)) PlayerData.instance.CaravanTroupeLocation = (GlobalEnums.CaravanTroupeLocations)packet.Number;
+                else PlayerData.instance.SetInt(packet.Key, packet.Number);
             }
             ClientState.LastItem = "";
         });
