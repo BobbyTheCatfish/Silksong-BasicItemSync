@@ -281,28 +281,34 @@ internal class PersistentBoolItemHook
 
     [HarmonyPatch(nameof(PersistentBoolItem.SaveStateNoCondition))]
     [HarmonyPostfix]
-    static void SaveStateNoConditionPostfix(PersistentItem<bool> __instance, bool __state) {
-        if (__state == __instance.ItemData.Value)// || __instance.ItemData.Value == __instance.DefaultValue)
+    static void SaveStateNoConditionPostfix(PersistentItem<bool> __instance, bool __state)
+    {
+        if (__state == __instance.ItemData.Value)
         {
             Log.LogDebug($"[CLI: PBI.SSNC] persistent '{__instance.ItemData.ID}' value was the same ({__instance.ItemData.Value}), skipping");
             return;
         }
 
-        if (__instance.itemData.IsSemiPersistent || __instance.dontSave)
+        UpdateNoSave(__instance, __instance.ItemData.Value);
+    }
+
+    static void UpdateNoSave(PersistentItem<bool> persistent, bool value)
+    {
+
+        if (persistent.itemData.IsSemiPersistent || persistent.dontSave)
         {
-            Log.LogDebug($"[CLI: PBI.SSNC] persistent '{__instance.ItemData.ID}' value was semipersistent");
+            Log.LogDebug($"[CLI: PBI.UNS] persistent '{persistent.ItemData.ID}' value was semipersistent");
             return;
         }
 
-        var id = __instance.itemData.ID;
-        var scene = __instance.itemData.SceneName;
-        var value = __instance.itemData.Value;
+        var id = persistent.itemData.ID;
+        var scene = persistent.itemData.SceneName;
 
         FlagType flagType;
 
         var commonId = Regex.Replace(id.ToLower(), " ?\\((\\d+|Clone)\\)$", "");
-        if (__instance.TryGetComponent<Gate>(out var _)) flagType = FlagType.Shortcut;
-        else if (__instance.TryGetComponent<CollectableItemPickup>(out var pickup))
+        if (persistent.TryGetComponent<Gate>(out var _)) flagType = FlagType.Shortcut;
+        else if (persistent.TryGetComponent<CollectableItemPickup>(out var pickup))
         {
             var item = pickup.Item;
 
@@ -318,7 +324,7 @@ internal class PersistentBoolItemHook
         else if (commonId.StartsWith("battle scene") || commonId.StartsWith("black thread battle scene") || commonId.StartsWith("boss scene")) flagType = FlagType.Arena;
         else
         {
-            Log.LogDebug($"[CLI: PBI.SSNC]persistent '{__instance.ItemData.ID}' value was not sent");
+            Log.LogDebug($"[CLI: PBI.SSNC]persistent '{persistent.ItemData.ID}' value was not sent");
             return;
         }
 
@@ -334,13 +340,20 @@ internal class PersistentBoolItemHook
 
     }
 
-    public static void UpdateValue(PersistentBoolItem? persistent, bool value)
+    public static void UpdateValue(PersistentBoolItem? persistent, bool value, bool update = true)
     {
         if (!persistent) return;
 
-        var preValue = persistent.ItemData.Value;
-        persistent.ItemData.Value = value;
-        SaveStateNoConditionPostfix(persistent, preValue);
+        if (update)
+        {
+            var preValue = persistent.ItemData.Value;
+            persistent.ItemData.Value = value;
+            SaveStateNoConditionPostfix(persistent, preValue);
+        }
+        else
+        {
+            UpdateNoSave(persistent, value);
+        }
     }
 }
 
@@ -583,7 +596,7 @@ internal static class BreakableHook
 {
     [HarmonyPatch(nameof(Breakable.Break))]
     [HarmonyPostfix]
-    static void Break(Breakable __instance) => PersistentBoolItemHook.UpdateValue(__instance.persistent);
+    static void Break(Breakable __instance) => PersistentBoolItemHook.UpdateValue(__instance.persistent, true, false);
 }
 
 
