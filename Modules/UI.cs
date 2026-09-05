@@ -49,7 +49,7 @@ namespace BasicItemSync.Modules
             PopupItem GetNeedleStrike()
             {
                 var renderer = inv.GetChild(1).GetChild(0).GetChild(0).GetChild(1).GetComponent<SpriteRenderer>();
-                return new PopupItem("Needle Strike", renderer.sprite);
+                return new PopupItem("Needle Strike", renderer.sprite, 0.15f);
             }
 
             return key switch
@@ -136,24 +136,27 @@ namespace BasicItemSync.Modules
         public string Name;
         public Sprite Sprite;
         public Object Object;
+        public float Scale;
 
         public PopupItem(FullQuestBase quest)
         {
             Object = quest;
             Name = Language.Get(quest.DisplayName.Key, quest.DisplayName.Sheet);
             Sprite = quest.QuestType.Icon;
+            Scale = 1;
         }
 
-        public PopupItem(string name, Sprite sprite)
+        public PopupItem(string name, Sprite sprite, float scale = 1)
         {
             Name = name;
             Sprite = sprite;
             Object = sprite;
+            Scale = scale;
         }
 
         public Object GetRepresentingObject() => Object;
 
-        public float GetUIMsgIconScale() => 1;
+        public float GetUIMsgIconScale() => Scale;
 
         public string GetUIMsgName() => Name;
 
