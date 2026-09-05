@@ -1,5 +1,6 @@
 ﻿using BasicItemSync.Modules.Network.Client;
 using HarmonyLib;
+using HutongGames.PlayMaker.Actions;
 using System.Collections.Generic;
 
 namespace BasicItemSync.Modules.Hooks;
@@ -122,31 +123,52 @@ internal class CollectableItemPickupHook
     [HarmonyPostfix]
     public static void DoPickupAction(CollectableItemPickup __instance, ref bool __result)
     {
-        var key = __instance.Item.name;
-        if (ClientState.WasItemReceived(key)) return;
-
         if (!__result || !__instance.Item) return;
-        if (!CollectableTypes.TryGetValue(key, out var flagType))
-        {
-            if (__instance.Item is CollectableRelic) flagType = FlagType.Collectable;
-            else
-            {
-                Log.LogWarning($"Unknown item {key}");
-                return;
-            }
-        }
-
-        if (flagType == FlagType.DoNotSync) return;
+        if (!OnGetItem(__instance.Item)) return;
 
         var boolName = __instance.playerDataBool;
         PlayerDataHook.BoolUpdated(boolName, true);
-
-        var displayName = __instance.Item.GetPopupName();
-        NetworkSender.SendCollectable(key, displayName, 1, flagType);
 
         if (__instance.persistent)
         {
             PersistentBoolItemHook.UpdateValue(__instance.persistent);
         }
+    }
+
+    public static bool OnGetItem(SavedItem item)
+    {
+        var key = item.name;
+        if (ClientState.WasItemReceived(key)) return false;
+
+        if (!CollectableTypes.TryGetValue(key, out var flagType))
+        {
+            if (item is CollectableRelic) flagType = FlagType.Collectable;
+            else
+            {
+                Log.LogWarning($"Unknown item {key}");
+                return false;
+            }
+        }
+
+        if (flagType == FlagType.DoNotSync) return false;
+
+        var displayName = item.GetPopupName();
+        NetworkSender.SendCollectable(key, displayName, 1, flagType);
+
+        return true;
+    }
+}
+
+[HarmonyPatch(typeof(SavedItemGet))]
+internal class SavedItemGetHook
+{
+    [HarmonyPatch(nameof(SavedItemGet.OnEnter))]
+    [HarmonyPostfix]
+    public static void OnEnter(SavedItemGet __instance)
+    {
+        var item = __instance.Item.Value as SavedItem;
+        if (!item) return;
+
+        CollectableItemPickupHook.OnGetItem(item);
     }
 }
