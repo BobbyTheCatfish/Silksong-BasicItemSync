@@ -27,6 +27,7 @@ internal class ServerAddon : SSMP.Api.Server.ServerAddon
         NetworkForwarder.Initialize();
         ServerApi.CommandManager.RegisterCommand(new SettingCommand(Settings));
         api.ServerManager.PlayerConnectEvent += OnPlayerConnect;
+        api.ServerManager.PlayerDisconnectEvent += NetworkForwarder.OnPlayerLeave;
     }
 
     void OnPlayerConnect(IServerPlayer player)

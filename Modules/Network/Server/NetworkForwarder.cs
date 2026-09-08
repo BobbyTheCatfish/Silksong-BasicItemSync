@@ -8,6 +8,7 @@ internal class NetworkForwarder
 {
     static IServerAddonNetworkReceiver<Packets> Receiver;
     static IServerAddonNetworkSender<Packets> Sender;
+    static readonly Dictionary<ushort, HashSet<string>> Tickets = [];
 
     public static void Initialize()
     {
@@ -29,6 +30,14 @@ internal class NetworkForwarder
         Receiver.RegisterPacketHandler<SettingsUpdatePacket>(Packets.Settings, OnSettings);
     }
 
+    public static void OnPlayerLeave(IServerPlayer player)
+    {
+        if (Tickets.ContainsKey(player.Id))
+        {
+            Tickets.Remove(player.Id);
+        }
+    }
+
     static string ModifyTicket(string ticket, ushort senderId)
     {
         return $"{senderId}-{ticket}";
@@ -40,6 +49,15 @@ internal class NetworkForwarder
 
         if (packet.IsReliable)
         {
+            if (!Tickets.TryGetValue(senderId, out var playerTickets))
+            {
+                playerTickets = [];
+                Tickets[senderId] = playerTickets;
+            }
+
+            if (playerTickets.Contains(packet.Ticket)) return;
+            playerTickets.Add(packet.Ticket);
+
             packet.Ticket = ModifyTicket(packet.Ticket, senderId);
         }
 

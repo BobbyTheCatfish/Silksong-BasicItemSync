@@ -16,6 +16,11 @@ namespace BasicItemSync.Modules.Network.Client
         {
             Sender = ClientAddon.api.NetClient.GetNetworkSender<Packets>(ClientAddon.Instance);
         }
+        
+        public static void OnDisconnect()
+        {
+            TicketCount = 0;
+        }
 
         static string GetTicket()
         {
@@ -29,6 +34,7 @@ namespace BasicItemSync.Modules.Network.Client
             {
                 packet.Ticket = GetTicket();
             }
+
             if (!ClientAddon.api.NetClient.IsConnected || Sender == null)
             {
                 Log.LogDebug("[CLI: Network Sender Collection] Not connected");

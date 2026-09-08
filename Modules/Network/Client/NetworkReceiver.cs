@@ -1,4 +1,6 @@
-﻿using SSMP.Api.Client.Networking;
+﻿using SSMP.Api.Client;
+using SSMP.Api.Client.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +9,7 @@ namespace BasicItemSync.Modules.Network.Client;
 internal class NetworkReceiver
 {
     static IClientAddonNetworkReceiver<Packets> Receiver;
+    static readonly Dictionary<ushort, HashSet<string>> Tickets = [];
 
     public static void Initialize()
     {
@@ -26,14 +29,32 @@ internal class NetworkReceiver
         Receiver.RegisterPacketHandler<SendPersistentIntsPacket>(Packets.PersistentInt, OnPersistentInt);
     }
 
-    static readonly HashSet<string> HandledTickets = [];
+    public static void OnDisconnect()
+    {
+        Tickets.Clear();
+    }
+
+    public static void OnPlayerLeave(IClientPlayer player)
+    {
+        if (Tickets.ContainsKey(player.Id))
+        {
+            Tickets.Remove(player.Id);
+        }
+    }
 
     static bool HasBeenHandled(Packet packet)
     {
         var ticket = packet.Ticket;
-        if (HandledTickets.Contains(ticket)) return true;
 
-        HandledTickets.Add(ticket);
+        var playerId = Convert.ToUInt16(packet.Ticket.Split("-")[0]);
+        if (!Tickets.TryGetValue(playerId, out var playerTickets)) {
+            playerTickets = [];
+            Tickets.Add(playerId, playerTickets);
+        }
+
+        if (playerTickets.Contains(ticket)) return true;
+
+        playerTickets.Add(ticket);
         return false;
     }
 

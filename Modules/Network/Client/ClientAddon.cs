@@ -1,7 +1,6 @@
 ﻿using BasicItemSync.Modules.Hooks;
 using BasicItemSync.Modules.Network.Server;
 using SSMP.Api.Client;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -34,7 +33,13 @@ internal class ClientAddon : SSMP.Api.Client.ClientAddon
 
         api.CommandManager.RegisterCommand(new SettingUICommand(Settings));
         api.ClientManager.ConnectEvent += OnConnect;
+
         api.ClientManager.DisconnectEvent += OnDisconnect;
+        api.ClientManager.DisconnectEvent += NetworkReceiver.OnDisconnect;
+        api.ClientManager.DisconnectEvent += NetworkSender.OnDisconnect;
+        
+        api.ClientManager.PlayerDisconnectEvent += NetworkReceiver.OnPlayerLeave;
+
     }
 
     void OnConnect()
