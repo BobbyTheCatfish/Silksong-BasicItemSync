@@ -1,5 +1,6 @@
 ﻿using BasicItemSync.Modules.Mocks;
 using BepInEx.Configuration;
+using UnityEngine;
 
 namespace BasicItemSync.Modules
 {
@@ -16,9 +17,12 @@ namespace BasicItemSync.Modules
         public static bool DebugLogs => _debugLogs?.Value ?? false;
         static ConfigEntry<bool>? _debugLogs;
 
+        public static SystemLanguage PreferredLanguage => _preferredLanguage?.Value ?? SystemLanguage.Unknown;
+        static ConfigEntry<SystemLanguage>? _preferredLanguage;
 
         public static void Init(ConfigFile config)
         {
+            _preferredLanguage = config.Bind("Language", "Preferred Language", SystemLanguage.Unknown);
             _debugLogs = config.Bind("Logs", "Debug Logs", true);
             _debugPlayerData = config.Bind("Logs", "PlayerData Logs", false);
             _debugPersistentData = config.Bind("Logs", "PersistentData Logs", false);
