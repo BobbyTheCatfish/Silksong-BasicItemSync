@@ -204,8 +204,8 @@ internal class PersistentBoolItemHook
         { "library_glass_heart_piece",          FlagType.Mask },
         { "silk spool",                         FlagType.Spool },
         { "lamp_hang_top",                      FlagType.Spool },
-        { "moss_berry_fruit",                   FlagType.QuestItem },
-        { "nectar pickup",                      FlagType.QuestItem },
+        { "moss_berry_fruit",                   FlagType.QuestProgress },
+        { "nectar pickup",                      FlagType.QuestProgress },
 
         { "bone chest",                         FlagType.Currency },
         { "geo small persistent",               FlagType.Currency },

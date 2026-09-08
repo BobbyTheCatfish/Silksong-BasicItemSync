@@ -2,6 +2,14 @@
 
 internal class QuestHandler
 {
+    public static void StartQuest(string name)
+    {
+        var quest = QuestManager.GetQuest(name);
+        if (!quest) return;
+
+        quest.BeginQuest(null, false);
+    }
+
     public static void EndQuest(string name)
     {
         var quest = QuestManager.GetQuest(name);
@@ -18,5 +26,6 @@ internal class QuestHandler
         if (!quest) return;
 
         quest.SilentlyComplete();
+        quest.ConsumeTarget();
     }
 }

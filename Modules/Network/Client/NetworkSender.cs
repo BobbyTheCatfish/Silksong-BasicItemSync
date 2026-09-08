@@ -133,13 +133,13 @@ namespace BasicItemSync.Modules.Network.Client
             });
         }
 
-        public static void SendQuestComplete(string internalName, string displayName)
+        public static void SendQuestState(string internalName, string displayName, FlagType state)
         {
             SendCollectionData(Packets.Quest, new SendBoolItemPacket
             {
                 Key = internalName,
                 Name = displayName,
-                FlagType = FlagType.Quest,
+                FlagType = state,
                 State = true
             });
         }

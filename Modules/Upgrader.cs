@@ -60,25 +60,37 @@ namespace BasicItemSync.Modules
             return Save();
         }
 
-        public static bool GiveCollectable(string itemKey, int amount)
+        public static bool GiveCollectable(string itemKey, int amount, bool isQuest)
         {
-            var collectable = CollectableItemManager.GetItemByName(itemKey);
-            if (!collectable)
+            var collected = false;
+            if (isQuest)
             {
-                var relic = CollectableRelicManager.GetRelic(itemKey);
-
-                if (!relic)
+                var quest = QuestManager.GetQuest(itemKey);
+                if (quest)
                 {
-                    Log.LogError($"Unknown collectable {itemKey}");
-                    return false;
+                    quest.Get(amount);
+                    collected = true;
+                }
+            }
+            if (!collected)
+            {
+                var collectable = CollectableItemManager.GetItemByName(itemKey);
+                if (!collectable)
+                {
+                    var relic = CollectableRelicManager.GetRelic(itemKey);
+                    if (!relic)
+                    {
+                        Log.LogError($"Unknown collectable {itemKey}");
+                        return false;
+                    }
+
+                    relic.Get(false);
+                    return Save();
                 }
 
-                relic.Get(false);
-                return Save();
+                collectable.AddAmount(amount);
+                UI.ShowPopup(collectable);
             }
-
-            collectable.AddAmount(amount);
-            UI.ShowPopup(collectable);
 
             return Save();
         }

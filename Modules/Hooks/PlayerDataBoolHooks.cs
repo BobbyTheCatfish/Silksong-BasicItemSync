@@ -333,29 +333,6 @@ internal static class QuestTargetPlayerDataBoolsHook
 }
 
 
-[HarmonyPatch(typeof(SubQuest))]
-internal static class SubQuestHook
-{
-    [HarmonyPatch(nameof(SubQuest.Get))]
-    [HarmonyPrefix]
-    public static void Get(SubQuest __instance)
-    {
-        var boolName = __instance.linkedBool;
-        var value = true;
-
-        PlayerDataHook.BoolUpdated(boolName, value);
-    }
-
-    [HarmonyPatch(nameof(SubQuest.HasBeenSeen), MethodType.Setter)]
-    [HarmonyPrefix]
-    public static void HasBeenSeen(SubQuest __instance, bool value)
-    {
-        var boolName = __instance.seenBool;
-        PlayerDataHook.BoolUpdated(boolName, value);
-    }
-}
-
-
 [HarmonyPatch(typeof(QuestRewardHolder))]
 internal class QuestRewardHolderHook
 {

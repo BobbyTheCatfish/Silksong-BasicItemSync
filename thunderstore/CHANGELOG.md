@@ -1,6 +1,26 @@
 # Changelog
 
+## 0.2
+### 0.2.0
+Features:
+- Team Only Sync mode (only sync with teammates)
+- Silk skills will automatically equip for players when received if they don't have a silk skill equipped
+
+New Syncs:
+- Flea Caravan location
+- The check for the Flea Caravan being able to move to Pale Lake
+- Songclave's state (active, NPCs, etc)
+- Completion of the act 2 start cutscene with Lace
+- Bellhome key
+
+Bugfixes:
+- Items could duplicate on bad network connections
+- Items in cages would despawn upon the cage breaking
+- The icon for needle strike was huge
+- Elegy of the Deep was not synced
+
 ## 0.1
+
 ### 0.1.4
 - Increased compatibility with SSMP standalone server
 

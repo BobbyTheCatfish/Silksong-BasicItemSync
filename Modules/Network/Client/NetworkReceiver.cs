@@ -18,7 +18,7 @@ internal class NetworkReceiver
         Receiver.RegisterPacketHandler<SendFloatItemPacket>(Packets.FloatPlayerData, OnFloatFlag);
         
         Receiver.RegisterPacketHandler<SendCurrencyPacket>(Packets.Currency, OnCurrency);
-        Receiver.RegisterPacketHandler<SendBoolItemPacket>(Packets.Quest, OnQuestItem);
+        Receiver.RegisterPacketHandler<SendBoolItemPacket>(Packets.Quest, OnQuestState);
         Receiver.RegisterPacketHandler<SendBoolItemPacket>(Packets.Tool, OnTool);
         Receiver.RegisterPacketHandler<SendFlagPacket>(Packets.Upgrade, OnUpgrade);
         Receiver.RegisterPacketHandler<SendIntItemPacket>(Packets.Collectable, OnCollectable);
@@ -102,14 +102,15 @@ internal class NetworkReceiver
         });
     }
 
-    static void OnQuestItem(SendBoolItemPacket packet)
+    static void OnQuestState(SendBoolItemPacket packet)
     {
         SyncPlugin.AddNextFrameAction(() =>
         {
             ClientState.LastItem = packet.Key;
             if (!HandleSpecialData(packet))
             {
-                QuestHandler.EndQuest(packet.Key);
+                if (packet.FlagType == FlagType.QuestStart) QuestHandler.StartQuest(packet.Key);
+                else QuestHandler.EndQuest(packet.Key);
             }
             ClientState.LastItem = "";
         });
@@ -173,7 +174,7 @@ internal class NetworkReceiver
             ClientState.LastItem = packet.Key;
             if (!HandleSpecialData(packet))
             {
-                Upgrader.GiveCollectable(packet.Key, packet.Number);
+                Upgrader.GiveCollectable(packet.Key, packet.Number, packet.FlagType == FlagType.QuestProgress);
             }
             ClientState.LastItem = "";
         });

@@ -51,10 +51,12 @@ Enables or disables syncing one of the following modules. Unless specified, modu
 	- All money spent in Shops and Donations
 	- Snitchflies
 	- NOT losses on death
-- Quests
-	- Quest completion
-	- Quest rewards
-- QuestItems (Default: false)
+- WishCompletion
+	- Starting and finishing wishes
+	- Wish rewards(?)
+- WishProgress
+	- Wish items
+	- Wish substeps
 - Bosses
 	- + Void Masses
 - Arenas

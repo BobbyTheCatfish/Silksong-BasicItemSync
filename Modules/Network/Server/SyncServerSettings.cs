@@ -17,8 +17,8 @@ namespace BasicItemSync.Modules.Network.Server
         public bool SyncPins = true;
         public bool SyncCurrency = true;
         public bool SyncSpendingCurrency = false;
-        public bool SyncQuests = true;
-        public bool SyncQuestItems = false;
+        public bool SyncWishCompletion = true;
+        public bool SyncWishProgress = true;
         public bool SyncBosses = true;
         public bool SyncArenas = true;
         public bool SyncProgression = true;
@@ -53,9 +53,9 @@ namespace BasicItemSync.Modules.Network.Server
                 FlagType.Spool => SyncUpgrades,
                 FlagType.Pouch => SyncUpgrades,
                 FlagType.CraftingKit => SyncUpgrades,
-                FlagType.Quest => SyncQuests,
-                FlagType.QuestStart => SyncQuestItems,
-                FlagType.QuestItem => SyncQuestItems,
+                FlagType.QuestStart => SyncWishCompletion,
+                FlagType.QuestProgress => SyncWishProgress,
+                FlagType.QuestComplete => SyncWishCompletion,
                 FlagType.Tool => SyncTools,
                 FlagType.Crest => SyncCrests,
                 FlagType.SilkHeart => SyncUpgrades,
