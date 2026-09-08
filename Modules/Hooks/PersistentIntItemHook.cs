@@ -26,13 +26,13 @@ internal class PersistentIntItemHook
     {
         if (__state == __instance.ItemData.Value)// || __instance.ItemData.Value == __instance.DefaultValue)
         {
-            Log.LogDebug($"[CLI: PII.SSNC] persistent '{__instance.ItemData.ID}' value was the same ({__instance.ItemData.Value}), skipping");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PII.SSNC] persistent '{__instance.ItemData.ID}' value was the same ({__instance.ItemData.Value}), skipping");
             return;
         }
 
         if (__instance.itemData.IsSemiPersistent || __instance.dontSave)
         {
-            Log.LogDebug($"[CLI: PII.SSNC] persistent '{__instance.ItemData.ID}' value was semipersistent");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PII.SSNC] persistent '{__instance.ItemData.ID}' value was semipersistent");
             return;
         }
 
@@ -61,11 +61,11 @@ internal class PersistentIntItemHook
 
         if (flagType == FlagType.DoNotSync)
         {
-            Log.LogDebug($"[CLI: PII.SSNC] persistent '{__instance.ItemData.ID}' value was not sent");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PII.SSNC] persistent '{__instance.ItemData.ID}' value was not sent");
             return;
         }
 
-        Log.LogDebug($"[CLI: PII.SSNC] {commonId}, {flagType}");
+        if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PII.SSNC] {commonId}, {flagType}");
 
         NetworkSender.AddPersistentIntData(id, scene, value, flagType);
     }
@@ -96,7 +96,7 @@ internal static class HitSlidePlatformHook
     {
         if (__state == __instance.currentNodeIndex)
         {
-            Log.LogDebug($"[CLI: HSP.OH] Platform {__instance.name} state was the same ({__state})");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: HSP.OH] Platform {__instance.name} state was the same ({__state})");
             return;
         }
 

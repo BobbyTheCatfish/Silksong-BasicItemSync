@@ -285,7 +285,7 @@ internal class PersistentBoolItemHook
     {
         if (__state == __instance.ItemData.Value)
         {
-            Log.LogDebug($"[CLI: PBI.SSNC] persistent '{__instance.ItemData.ID}' value was the same ({__instance.ItemData.Value}), skipping");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PBI.SSNC] persistent '{__instance.ItemData.ID}' value was the same ({__instance.ItemData.Value}), skipping");
             return;
         }
 
@@ -297,7 +297,7 @@ internal class PersistentBoolItemHook
 
         if (persistent.itemData.IsSemiPersistent || persistent.dontSave)
         {
-            Log.LogDebug($"[CLI: PBI.UNS] persistent '{persistent.ItemData.ID}' value was semipersistent");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PBI.UNS] persistent '{persistent.ItemData.ID}' value was semipersistent");
             return;
         }
 
@@ -324,11 +324,11 @@ internal class PersistentBoolItemHook
         else if (commonId.StartsWith("battle scene") || commonId.StartsWith("black thread battle scene") || commonId.StartsWith("boss scene")) flagType = FlagType.Arena;
         else
         {
-            Log.LogDebug($"[CLI: PBI.SSNC]persistent '{persistent.ItemData.ID}' value was not sent");
+            if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PBI.SSNC] persistent '{persistent.ItemData.ID}' value was not sent");
             return;
         }
 
-        Log.LogDebug($"[CLI: PBI.SSNC] {commonId}, {flagType}");
+        if (ModSettings.DebugPersistentData) Log.LogDebug($"[CLI: PBI.SSNC] {commonId}, {flagType}");
 
         NetworkSender.AddPersistentBoolData(id, scene, value, flagType);
     }

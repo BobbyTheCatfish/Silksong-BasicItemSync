@@ -7,16 +7,21 @@ namespace BasicItemSync.Modules
     {
         public bool InstanceDebugPlayerData => DebugPlayerData;
         public static bool DebugPlayerData => _debugPlayerData?.Value ?? false;
-        static ConfigEntry<bool> _debugPlayerData;
+        static ConfigEntry<bool>? _debugPlayerData;
+
+        public static bool DebugPersistentData => _debugPersistentData?.Value ?? false;
+        static ConfigEntry<bool>? _debugPersistentData;
 
         public bool InstanceDebugLogs => DebugLogs;
         public static bool DebugLogs => _debugLogs?.Value ?? false;
-        static ConfigEntry<bool> _debugLogs;
+        static ConfigEntry<bool>? _debugLogs;
+
 
         public static void Init(ConfigFile config)
         {
-            _debugLogs = config.Bind("Debug", "Enable debug logs", true);
-            _debugPlayerData = config.Bind("Debug", "Enable PlayerData logs", false);
+            _debugLogs = config.Bind("Logs", "Debug Logs", true);
+            _debugPlayerData = config.Bind("Logs", "PlayerData Logs", false);
+            _debugPersistentData = config.Bind("Logs", "PersistentData Logs", false);
         }
     }
 }
