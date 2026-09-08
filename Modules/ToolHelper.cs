@@ -9,7 +9,11 @@ namespace BasicItemSync.Modules
             if (isCrest)
             {
                 var crest = ToolItemManager.GetCrestByName(key);
-                if (crest) crest.Unlock();
+                if (crest)
+                {
+                    crest.Unlock();
+                    UI.ShowPopup(crest);
+                }
                 else Log.LogWarning($"[CLI: TH.GiveTool] Unknown crest '{key}'");
             }
             else
@@ -28,6 +32,7 @@ namespace BasicItemSync.Modules
                 {
                     tool.Unlock();
                     GiveSilkSkill(tool);
+                    UI.ShowPopup(tool);
                 }
                 else tool.Lock();
             }
@@ -49,6 +54,7 @@ namespace BasicItemSync.Modules
             var tool = ToolItemManager.GetToolByName(toolName);
             if (!tool) return;
 
+            UI.ShowPopup(tool);
             GiveSilkSkill(tool);
         }
 
